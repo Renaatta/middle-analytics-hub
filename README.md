@@ -1,36 +1,39 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📊 Enterprise Analytics HUB
 
-## Getting Started
+A high-performance, white-label analytics dashboard built to demonstrate Middle+ frontend architecture and modern React patterns.
 
-First, run the development server:
+## 🚀 Tech Stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+* **Framework:** Next.js 16 (Turbopack)
+* **Architecture:** Hybrid Routing (App Router + Pages Router)
+* **State Management:** Zustand (Client state) + React Query (Server state / Cache)
+* **Styling:** CSS Modules, CSS Variables (Theming), Container Queries (`@container`)
+* **Language:** TypeScript
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🧠 Architectural Highlights
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+This project intentionally combines different rendering strategies to optimize performance and state safety:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1.  **Hybrid Rendering (`/pricing`):**
+    * Uses **App Router** with **ISR** (Incremental Static Regeneration).
+    * Implements the **Hydration Boundary** pattern: queries are prefetched on the Node.js server, dehydrated into HTML, and hydrated on the client for zero-layout-shift FCP.
+2.  **Isolated SPA Engine (`/dashboard`):**
+    * Uses **Pages Router** with strictly disabled SSR via `next/dynamic`.
+    * Prevents **Hydration Mismatch** when working with browser-specific APIs and client-side global stores (Zustand).
+    * Implements dynamic data polling with React Query.
 
-## Learn More
+## 🛠️ Advanced React Patterns Implemented
 
-To learn more about Next.js, take a look at the following resources:
+* **Fault Tolerance:** Custom class-based `ErrorBoundary` to isolate UI widget crashes without dropping the whole page.
+* **Higher-Order Components (HOC):** `withAuth` pattern for route protection and simulated security gateways.
+* **Render Props:** `MouseTracker` component for sharing UI coordinates with decoupled tooltip components.
+* **Modern Responsiveness:** Uses `@container` queries for widgets to adapt based on their parent grid slots rather than global `@media` viewports.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## ⚙️ Getting Started
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Install dependencies:
+   ```bash
+   npm install
+2. Run the development server:
+   npm run dev
+3. Open http://localhost:3000/dashboard to view the client-side dashboard engine, or /pricing to see the ISR marketing page.
