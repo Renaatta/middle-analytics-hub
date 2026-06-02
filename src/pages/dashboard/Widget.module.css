@@ -1,0 +1,44 @@
+/* Обязательно объявляем обертку контейнером, за размерами которого будем следить */
+.widgetContainer {
+  container-type: inline-size;
+  container-name: telemetry-card;
+  width: 100%;
+}
+
+.widgetCard {
+  border: 1px solid var(--border-color);
+  padding: 1.5rem;
+  border-radius: 8px;
+  background-color: var(--card-bg);
+  display: flex;
+  flex-direction: row; /* По умолчанию в линию */
+  justify-content: space-between;
+  align-items: center;
+}
+
+.infoBlock {
+  display: flex;
+  flex-direction: column;
+}
+
+.statusBadge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.85rem;
+  font-weight: bold;
+}
+
+/* МАГИЯ CONTAINER QUERIES */
+/* Если родительская карточка становится уже 450px (например, мы зажали её в узкую колонку сетки) */
+@container telemetry-card (max-width: 450px) {
+  .widgetCard {
+    flex-direction: column; /* Перестраиваем в колонку */
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem;
+  }
+  
+  .statusBadge {
+    align-self: flex-end; /* Сдвигаем бэдж вниз и вправо */
+  }
+}

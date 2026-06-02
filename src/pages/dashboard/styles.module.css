@@ -1,0 +1,52 @@
+/* Базовая тема (Light) */
+.dashboardRoot {
+  --bg-color: #f9fafb;
+  --text-color: #111827;
+  --card-bg: #ffffff;
+  --border-color: #e5e7eb;
+  --accent-color: #3b82f6;
+  --success-color: #22c55e;
+  --muted-text: #6b7280;
+
+  padding: 2rem;
+  font-family: system-ui, sans-serif;
+  min-height: 100vh;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Переключение темы через data-attribute */
+.dashboardRoot[data-theme='dark'] {
+  --bg-color: #121212;
+  --text-color: #f3f4f6;
+  --card-bg: #1f2937;
+  --border-color: #374151;
+  --accent-color: #60a5fa;
+  --muted-text: #9ca3af;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 1rem;
+}
+
+.themeButton {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  border-radius: 6px;
+  background-color: var(--text-color);
+  color: var(--bg-color);
+  border: none;
+  font-weight: 500;
+}
+
+.grid {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1rem;
+}

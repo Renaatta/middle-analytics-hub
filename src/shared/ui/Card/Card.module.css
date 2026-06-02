@@ -1,0 +1,6 @@
+.root {
+  display: block;
+  /* Сюда потом придут наши --css-variables для White-labeling */
+  padding: 1rem;
+  border: 1px solid var(--border-color, #ccc);
+}
