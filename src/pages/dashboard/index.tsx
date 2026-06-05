@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useQuery } from '@tanstack/react-query';
+
 import { useAppStore } from '@/features/analytics/store/useAppStore';
-import { ErrorBoundary } from '@/shared/ui/ErrorBoundary/ErrorBoundary';
 import { withAuth } from '@/features/analytics/hoc/withAuth'; // Импортируем HOC
+
+import { ErrorBoundary } from '@/shared/ui/ErrorBoundary/ErrorBoundary';
 import { MouseTracker } from '@/shared/ui/MouseTracker/MouseTracker'; // Импортируем Render Props
 
 import styles from './styles.module.css';
@@ -16,6 +18,26 @@ async function fetchDashboardLogs() {
     { id: 103, title: 'CRITICAL: Memory leak detected in worker-3', status: 'CRITICAL' },
   ];
 }
+
+// НАСТОЯЩИЙ DYNAMIC IMPORT
+// Мы передаем анонимную стрелочную функцию, которая вызывает import().
+// Next.js вынесет этот файл в отдельный JS-чанк.
+const LazyCanvasChart = dynamic(() => import('@/features/analytics/components/HeavyCanvasChart'), {
+  ssr: false, // Canvas не работает на сервере, там нет DOM
+  loading: () => (
+    <div
+      style={{
+        padding: '2rem',
+        textAlign: 'center',
+        background: '#f3f4f6',
+        borderRadius: '8px',
+        animation: 'pulse 2s infinite',
+      }}
+    >
+      ⏳ Скачивание тяжелого модуля графиков по сети...
+    </div>
+  ),
+});
 
 function DashboardCore() {
   const theme = useAppStore((state) => state.theme);
@@ -80,6 +102,11 @@ function DashboardCore() {
       <main>
         <h2>System Telemetry Control Panel</h2>
         {isLoading && <p>Connecting to data stream...</p>}
+
+        {/* Наш ленивый тяжелый график */}
+        <div style={{ marginBottom: '2rem' }}>
+          <LazyCanvasChart />
+        </div>
 
         <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
           {/* Левая широкая колонка */}
