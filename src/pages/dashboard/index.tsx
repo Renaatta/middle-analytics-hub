@@ -5,11 +5,11 @@ import { useQuery } from '@tanstack/react-query';
 import { useAppStore } from '@/features/analytics/store/useAppStore';
 import { withAuth } from '@/features/analytics/hoc/withAuth'; // Импортируем HOC
 
+import { TelemetryWidget } from '@/features/analytics/components/TelemetryWidget/TelemetryWidget';
 import { ErrorBoundary } from '@/shared/ui/ErrorBoundary/ErrorBoundary';
 import { MouseTracker } from '@/shared/ui/MouseTracker/MouseTracker'; // Импортируем Render Props
 
 import styles from './styles.module.css';
-import widgetStyles from './Widget.module.css';
 
 async function fetchDashboardLogs() {
   return [
@@ -135,46 +135,6 @@ function DashboardCore() {
           </div>
         </div>
       </main>
-    </div>
-  );
-}
-
-interface WidgetProps {
-  log: { id: number; title: string; status: string };
-  bug: boolean;
-  mouseCoords: { x: number; y: number }; // Принимаем координаты
-}
-
-function TelemetryWidget({ log, bug, mouseCoords }: WidgetProps) {
-  if (bug && log.status === 'CRITICAL') {
-    throw new Error('Симулированный краш виджета телеметрии!');
-  }
-
-  return (
-    <div className={widgetStyles.widgetContainer}>
-      <div className={widgetStyles.widgetCard}>
-        <div className={widgetStyles.infoBlock}>
-          <span style={{ fontSize: '0.8rem', color: 'var(--muted-text)' }}>BEACON #{log.id}</span>
-          <strong style={{ margin: '0.25rem 0' }}>{log.title}</strong>
-
-          {/* Выводим координаты тултипа, полученные через Render Props */}
-          <span
-            style={{ fontSize: '0.75rem', color: 'var(--accent-color)', fontFamily: 'monospace' }}
-          >
-            📊 Cursor Focus: X: {mouseCoords.x}px | Y: {mouseCoords.y}px
-          </span>
-        </div>
-        <span
-          className={widgetStyles.statusBadge}
-          style={{
-            background: log.status === 'CRITICAL' ? '#fef2f2' : '#f0fdf4',
-            color: log.status === 'CRITICAL' ? '#ef4444' : '#22c55e',
-          }}
-        >
-          {log.status}
-        </span>
-      </div>
-      <div style={{ height: '0.75rem' }}></div>
     </div>
   );
 }
