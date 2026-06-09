@@ -8,6 +8,7 @@ A high-performance, white-label analytics dashboard built to demonstrate Middle+
 - **Architecture:** Hybrid Routing (App Router + Pages Router)
 - **State Management:** Zustand (Client state) + React Query (Server state / Cache)
 - **Performance:** Native Web Workers, Canvas 2D API, Dynamic Imports
+- **Testing & UI Isolation:** Vitest, React Testing Library, Storybook
 - **Styling:** CSS Modules, CSS Variables (Theming), Container Queries (`@container`)
 - **Language:** TypeScript
 
@@ -25,12 +26,15 @@ This project intentionally combines different rendering strategies to optimize p
 3.  **Multithreading & Lazy Loading:**
     - Implements true **Code Splitting** using `next/dynamic` to lazy-load heavy chart modules only when required.
     - Offloads heavy data generation (e.g., 50k plot points) to background CPU threads using native **Web Workers** to maintain 60FPS UI responsiveness.
+4.  **Component Isolation & Testing:**
+    - UI components are developed in complete isolation using **Storybook**, independent of the Next.js routing context.
+    - Multi-environment testing setup using **Vitest** (JSDOM for unit tests, Chromium/Playwright for Storybook UI validation).
 
 ## 🛠️ Advanced Patterns & Techniques
 
 - **High-Performance Graphics:** Native HTML5 `<canvas>` rendering to handle large datasets (50,000+ nodes) efficiently without bloating the DOM.
 - **Fault Tolerance:** Custom class-based `ErrorBoundary` to isolate UI widget crashes without dropping the whole page.
-- **Component Patterns:** \* **HOC (Higher-Order Components):** `withAuth` pattern for route protection and simulated security gateways.
+- **Component Patterns:** - **HOC (Higher-Order Components):** `withAuth` pattern for route protection and simulated security gateways.
   - **Render Props:** `MouseTracker` component for sharing UI coordinates with decoupled tooltip components.
 - **Function Patterns:** **HOF (Higher-Order Functions)** like `withPerformanceLogger` to abstract execution time tracking.
 - **Modern Responsiveness:** Uses `@container` queries for widgets to adapt based on their parent grid slots rather than global `@media` viewports.
@@ -46,3 +50,14 @@ This project intentionally combines different rendering strategies to optimize p
    npm run dev
    ```
 3. Open http://localhost:3000/dashboard to view the client-side dashboard engine, or /pricing to see the ISR marketing page.
+
+## 🧪 Testing & Development Environment
+
+○ Run Storybook (Interactive UI Sandbox):
+   ```bash
+   npm run storybook
+   ```
+○ Run Unit & UI Tests (Vitest):
+   ```bash
+   npx vitest run
+   ```
