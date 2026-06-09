@@ -5,10 +5,11 @@ A high-performance, white-label analytics dashboard built to demonstrate Middle+
 ## 🚀 Tech Stack
 
 - **Framework:** Next.js 16 (Turbopack)
-- **Architecture:** Hybrid Routing (App Router + Pages Router)
+- **Architecture:** Hybrid Routing (App Router + Pages Router), Multi-tenant White-labeling
 - **State Management:** Zustand (Client state) + React Query (Server state / Cache)
 - **Performance:** Native Web Workers, Canvas 2D API, Dynamic Imports
 - **Testing & UI Isolation:** Vitest, React Testing Library, Storybook
+- **CI/CD:** GitHub Actions
 - **Styling:** CSS Modules, CSS Variables (Theming), Container Queries (`@container`)
 - **Language:** TypeScript
 
@@ -29,12 +30,17 @@ This project intentionally combines different rendering strategies to optimize p
 4.  **Component Isolation & Testing:**
     - UI components are developed in complete isolation using **Storybook**, independent of the Next.js routing context.
     - Multi-environment testing setup using **Vitest** (JSDOM for unit tests, Chromium/Playwright for Storybook UI validation).
+5.  **Enterprise White-labeling & CI/CD:**
+    - **Multi-tenancy:** Dynamic rebranding via CSS Variables and Zustand global state (`data-tenant`).
+    - **Feature Flags:** Conditional rendering and code-splitting control based on tenant-specific configuration dictionaries.
+    - **Automated Pipeline:** GitHub Actions workflow ensuring robust CI/CD (linting, type-checking, automated testing, and building) on every push/PR.
 
 ## 🛠️ Advanced Patterns & Techniques
 
 - **High-Performance Graphics:** Native HTML5 `<canvas>` rendering to handle large datasets (50,000+ nodes) efficiently without bloating the DOM.
 - **Fault Tolerance:** Custom class-based `ErrorBoundary` to isolate UI widget crashes without dropping the whole page.
-- **Component Patterns:** - **HOC (Higher-Order Components):** `withAuth` pattern for route protection and simulated security gateways.
+- **Component Patterns:**
+  - **HOC (Higher-Order Components):** `withAuth` pattern for route protection and simulated security gateways.
   - **Render Props:** `MouseTracker` component for sharing UI coordinates with decoupled tooltip components.
 - **Function Patterns:** **HOF (Higher-Order Functions)** like `withPerformanceLogger` to abstract execution time tracking.
 - **Modern Responsiveness:** Uses `@container` queries for widgets to adapt based on their parent grid slots rather than global `@media` viewports.
