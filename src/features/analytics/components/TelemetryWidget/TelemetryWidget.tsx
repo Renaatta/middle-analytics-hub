@@ -1,5 +1,5 @@
 // Предположим, что мы скопировали сюда и стили, либо оставили их как были
-import widgetStyles from '@/pages/dashboard/Widget.module.css';
+import widgetStyles from '../../../../pages/dashboard/Widget.module.css';
 
 export interface WidgetProps {
   log: { id: number; title: string; status: string };

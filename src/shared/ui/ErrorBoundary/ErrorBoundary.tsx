@@ -27,7 +27,7 @@ export class ErrorBoundary extends Component<Props, State> {
   public render() {
     if (this.state.hasError) {
       return (
-        this.fallback || (
+        this.props.fallback || (
           <div
             style={{
               padding: '1rem',
