@@ -5,7 +5,7 @@ interface MousePosition {
   y: number;
 }
 
-interface MouseTrackerProps {
+export interface MouseTrackerProps {
   // Проп children — это функция, которая принимает координаты и возвращает JSX
   children: (position: MousePosition) => React.ReactNode;
 }

@@ -34,8 +34,9 @@ export default defineConfig({
       },
       // 2. Наш проект для обычных Unit-тестов (HOF, хуки, утилиты)
       {
-        name: 'unit',
+        extends: true, // Наследуем корневые alias и plugins
         test: {
+          name: 'unit', // ИСПРАВЛЕНО: Теперь name находится внутри объекта test
           environment: 'jsdom',
           setupFiles: './vitest.setup.ts',
           include: ['src/**/*.test.ts', 'src/**/*.test.tsx'], // Ищем наши тесты!
