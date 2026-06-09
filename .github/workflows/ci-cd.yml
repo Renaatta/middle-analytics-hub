@@ -1,0 +1,46 @@
+name: Enterprise CI/CD Pipeline
+
+# 1. Указываем триггеры: когда запускать робота?
+on:
+  push:
+    branches: [main] # Запуск при любом пуше в ветку main
+  pull_request:
+    branches: [main] # Запуск при попытке слияния в main
+
+jobs:
+  # Название нашей первой большой задачи (Роберта-инспектора)
+  audit-and-test:
+    # Запускаем на чистой виртуальной машине Ubuntu (Linux)
+    runs-on: ubuntu-latest
+
+    steps:
+      # Шаг 1: Скачиваем код репозитория на виртуальную машину
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      # Шаг 2: Разворачиваем Node.js нужной версии
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4
+        with:
+          node-node-version: 20
+          cache: 'npm' # Автоматически кэширует node_modules для ускорения следующих сборок
+
+      # Шаг 3: Быстрая и чистая установка зависимостей (ci вместо install)
+      - name: Install dependencies
+        run: npm ci
+
+      # Шаг 4: Запускаем проверку типов TypeScript
+      - name: Run TypeScript compiler check
+        run: npx tsc --noEmit
+
+      # Шаг 5: Запускаем наши Unit и UI тесты (Vitest), которые мы написали
+      - name: Run Vitest Automation Suite
+        run: npx vitest run --project=unit
+
+      # Шаг 6: Проверяем, собирается ли проект Next.js в продакшн бандл
+      - name: Build Next.js production application
+        run: npm run build
+        env:
+          # Здесь в реальных SaaS проектах мы можем передавать ID клиента,
+          # чтобы собирать кастомный билд под конкретный сервер!
+          NEXT_PUBLIC_DEFAULT_TENANT: robotech
