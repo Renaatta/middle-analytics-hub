@@ -1,0 +1,35 @@
+/* Дефолтная тема (РобоТех) - строгий синий */
+:root, [data-tenant="robotech"] {
+  --brand-primary: #2563eb;
+  --brand-primary-hover: #1d4ed8;
+  --brand-surface: #ffffff;
+  --brand-background: #f8fafc;
+  --brand-text: #0f172a;
+  --brand-text-muted: #64748b;
+  --brand-border: #e2e8f0;
+  --brand-radius: 8px;      /* Стандартные скругления */
+}
+
+/* Тема БиоМед - экологичный зеленый */
+[data-tenant="biomed"] {
+  --brand-primary: #16a34a;
+  --brand-primary-hover: #15803d;
+  --brand-surface: #ffffff;
+  --brand-background: #f0fdf4; /* Легкий зеленый оттенок фона */
+  --brand-text: #14532d;
+  --brand-text-muted: #166534;
+  --brand-border: #bbf7d0;
+  --brand-radius: 16px;     /* Мягкие, круглые формы */
+}
+
+/* Тема ФинГарант - премиальный темный */
+[data-tenant="fingarant"] {
+  --brand-primary: #d97706; /* Золотой/Янтарный */
+  --brand-primary-hover: #b45309;
+  --brand-surface: #171717; /* Темные карточки */
+  --brand-background: #0a0a0a; /* Почти черный фон */
+  --brand-text: #f5f5f5;
+  --brand-text-muted: #a3a3a3;
+  --brand-border: #404040;
+  --brand-radius: 0px;      /* Строгие острые углы */
+}

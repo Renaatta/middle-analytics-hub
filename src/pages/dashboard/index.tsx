@@ -3,6 +3,8 @@ import dynamic from 'next/dynamic';
 import { useQuery } from '@tanstack/react-query';
 
 import { useAppStore } from '@/features/analytics/store/useAppStore';
+import { useTenantStore, Tenant } from '@/shared/store/tenantStore';
+import { TENANT_CONFIGS } from '@/config/tenants';
 import { withAuth } from '@/features/analytics/hoc/withAuth'; // Импортируем HOC
 
 import { TelemetryWidget } from '@/features/analytics/components/TelemetryWidget/TelemetryWidget';
@@ -40,6 +42,8 @@ const LazyCanvasChart = dynamic(() => import('@/features/analytics/components/He
 });
 
 function DashboardCore() {
+  const { tenant, setTenant } = useTenantStore();
+  const currentConfig = TENANT_CONFIGS[tenant]; // Вытаскиваем настройки текущего клиента
   const theme = useAppStore((state) => state.theme);
   const brandName = useAppStore((state) => state.brandName);
   const toggleTheme = useAppStore((state) => state.toggleTheme);
@@ -58,7 +62,10 @@ function DashboardCore() {
           <p style={{ fontSize: '0.8rem', color: 'var(--muted-text)', margin: 0 }}>
             White-Label System
           </p>
-          <h1 style={{ margin: 0 }}>{brandName}</h1>
+          {/* 1. Динамическое название бренда вместо жестко зашитого текста */}
+          <h1 style={{ color: 'var(--brand-text)' }}>
+            Дашборд аналитики: {currentConfig.brandName}
+          </h1>
         </div>
 
         <div style={{ display: 'flex', gap: '1rem' }}>
@@ -103,9 +110,50 @@ function DashboardCore() {
         <h2>System Telemetry Control Panel</h2>
         {isLoading && <p>Connecting to data stream...</p>}
 
-        {/* Наш ленивый тяжелый график */}
-        <div style={{ marginBottom: '2rem' }}>
-          <LazyCanvasChart />
+        {/* 2. Feature Toggle: Рендерим Canvas-график ТОЛЬКО если он разрешен */}
+        {currentConfig.features.enableCanvasChart && (
+          <div
+            style={{
+              background: 'var(--brand-surface)',
+              padding: '1rem',
+              borderRadius: 'var(--brand-radius)',
+            }}
+          >
+            <LazyCanvasChart />
+          </div>
+        )}
+
+        <div
+          style={{
+            marginBottom: '2rem',
+            padding: '1rem',
+            background: 'var(--brand-surface)',
+            borderRadius: 'var(--brand-radius)',
+            border: '1px solid var(--brand-border)',
+            color: 'var(--brand-text)',
+          }}
+        >
+          <h3 style={{ margin: '0 0 1rem 0' }}>Настройки White-label (Текущий: {tenant})</h3>
+          <div style={{ display: 'flex', gap: '1rem' }}>
+            {(['robotech', 'biomed', 'fingarant'] as Tenant[]).map((t) => (
+              <button
+                key={t}
+                onClick={() => setTenant(t)}
+                style={{
+                  padding: '0.5rem 1rem',
+                  cursor: 'pointer',
+                  background: tenant === t ? 'var(--brand-primary)' : 'transparent',
+                  color: tenant === t ? '#fff' : 'var(--brand-text)',
+                  border: `1px solid var(--brand-primary)`,
+                  borderRadius: 'var(--brand-radius)',
+                  fontWeight: 'bold',
+                  transition: 'all 0.2s ease',
+                }}
+              >
+                {t.toUpperCase()}
+              </button>
+            ))}
+          </div>
         </div>
 
         <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
