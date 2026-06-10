@@ -10,6 +10,7 @@ import { withAuth } from '@/features/analytics/hoc/withAuth'; // Импорти�
 import { TelemetryWidget } from '@/features/analytics/components/TelemetryWidget/TelemetryWidget';
 import { ErrorBoundary } from '@/shared/ui/ErrorBoundary/ErrorBoundary';
 import { MouseTracker } from '@/shared/ui/MouseTracker/MouseTracker'; // Импортируем Render Props
+import { Modal } from '@/shared/ui/Modal/Modal';
 
 import styles from './styles.module.css';
 
@@ -49,6 +50,7 @@ function DashboardCore() {
   const toggleTheme = useAppStore((state) => state.toggleTheme);
 
   const [shouldCrash, setShouldCrash] = useState(false);
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 
   const { data: logs, isLoading } = useQuery({
     queryKey: ['dashboardLogs'],
@@ -69,6 +71,34 @@ function DashboardCore() {
         </div>
 
         <div style={{ display: 'flex', gap: '1rem' }}>
+          {/* Кнопка открытия */}
+          <button
+            onClick={() => setIsProfileModalOpen(true)}
+            style={{
+              marginLeft: 'auto', // Отодвинем вправо
+              padding: '0.5rem 1rem',
+              background: 'var(--brand-primary)',
+              color: '#fff',
+              border: 'none',
+              borderRadius: 'var(--brand-radius)',
+              cursor: 'pointer',
+            }}
+          >
+            ⚙️ Настройки профиля
+          </button>
+
+          {/* Компонент Портала */}
+          <Modal
+            isOpen={isProfileModalOpen}
+            onClose={() => setIsProfileModalOpen(false)}
+            title="Настройки профиля"
+          >
+            <p>Здесь могли бы быть настройки пользователя.</p>
+            <p>
+              Обратите внимание: визуально мы поверх всего интерфейса, но логически (в React) мы
+              внутри компонента DashboardCore!
+            </p>
+          </Modal>
           {/* Кнопка сброса сессии (чтобы протестировать HOC заново) */}
           <button
             onClick={() => {
