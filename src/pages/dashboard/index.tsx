@@ -8,12 +8,14 @@ import { TENANT_CONFIGS } from '@/config/tenants';
 import { withAuth } from '@/features/analytics/hoc/withAuth'; // Импортируем HOC
 import { useNetworkStatus } from '@/shared/hooks/useNetworkStatus';
 import { fetchAnalyticsFact } from '@/shared/api/fetchAnalyticsFact';
+import { SecurityProvider } from '@/shared/context/SecurityContext';
 
 import { TelemetryWidget } from '@/features/analytics/components/TelemetryWidget/TelemetryWidget';
 import { ErrorBoundary } from '@/shared/ui/ErrorBoundary/ErrorBoundary';
 import { MouseTracker } from '@/shared/ui/MouseTracker/MouseTracker'; // Импортируем Render Props
 import { Modal } from '@/shared/ui/Modal/Modal';
 import { AnalyticsFact } from '@/features/analytics/components/AnalyticsFact/AnalyticsFact';
+import { SecretDataWidget } from '@/features/analytics/components/SecretDataWidget/SecretDataWidget';
 
 import styles from './styles.module.css';
 
@@ -160,6 +162,14 @@ function DashboardCore() {
       </header>
 
       <main>
+        <SecurityProvider>
+          {/* Этот отрендерится сразу (публичный режим), контекст не вызывается */}
+          <SecretDataWidget isLocked={false} />
+
+          {/* Этот зайдет в ветку if, вызовет use(SecurityContext) и покажет заглушку ограничения доступа */}
+          <SecretDataWidget isLocked={true} />
+        </SecurityProvider>
+
         <h2>System Telemetry Control Panel</h2>
         {isLoading && <p>Connecting to data stream...</p>}
 
