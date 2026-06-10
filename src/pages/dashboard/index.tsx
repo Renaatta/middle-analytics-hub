@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import dynamic from 'next/dynamic';
 import { useQuery } from '@tanstack/react-query';
 
@@ -7,11 +7,13 @@ import { useTenantStore, Tenant } from '@/shared/store/tenantStore';
 import { TENANT_CONFIGS } from '@/config/tenants';
 import { withAuth } from '@/features/analytics/hoc/withAuth'; // Импортируем HOC
 import { useNetworkStatus } from '@/shared/hooks/useNetworkStatus';
+import { fetchAnalyticsFact } from '@/shared/api/fetchAnalyticsFact';
 
 import { TelemetryWidget } from '@/features/analytics/components/TelemetryWidget/TelemetryWidget';
 import { ErrorBoundary } from '@/shared/ui/ErrorBoundary/ErrorBoundary';
 import { MouseTracker } from '@/shared/ui/MouseTracker/MouseTracker'; // Импортируем Render Props
 import { Modal } from '@/shared/ui/Modal/Modal';
+import { AnalyticsFact } from '@/features/analytics/components/AnalyticsFact/AnalyticsFact';
 
 import styles from './styles.module.css';
 
@@ -54,6 +56,7 @@ function DashboardCore() {
 
   const [shouldCrash, setShouldCrash] = useState(false);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+  const [factPromise] = useState(() => fetchAnalyticsFact());
 
   const { data: logs, isLoading } = useQuery({
     queryKey: ['dashboardLogs'],
@@ -232,6 +235,17 @@ function DashboardCore() {
             ))}
           </div>
         </div>
+
+        {/* Обязательно оборачиваем в Suspense, так как use() переводит компонент в состояние ожидания */}
+        <Suspense
+          fallback={
+            <div style={{ padding: '1rem', color: 'var(--brand-text-muted)' }}>
+              ⏳ Загрузка аналитического факта через React 19 'use'...
+            </div>
+          }
+        >
+          <AnalyticsFact factPromise={factPromise} />
+        </Suspense>
       </main>
     </div>
   );
