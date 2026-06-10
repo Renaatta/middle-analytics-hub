@@ -6,6 +6,7 @@ import { useAppStore } from '@/features/analytics/store/useAppStore';
 import { useTenantStore, Tenant } from '@/shared/store/tenantStore';
 import { TENANT_CONFIGS } from '@/config/tenants';
 import { withAuth } from '@/features/analytics/hoc/withAuth'; // Импортируем HOC
+import { useNetworkStatus } from '@/shared/hooks/useNetworkStatus';
 
 import { TelemetryWidget } from '@/features/analytics/components/TelemetryWidget/TelemetryWidget';
 import { ErrorBoundary } from '@/shared/ui/ErrorBoundary/ErrorBoundary';
@@ -49,6 +50,8 @@ function DashboardCore() {
   const brandName = useAppStore((state) => state.brandName);
   const toggleTheme = useAppStore((state) => state.toggleTheme);
 
+  const isOnline = useNetworkStatus();
+
   const [shouldCrash, setShouldCrash] = useState(false);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 
@@ -64,6 +67,23 @@ function DashboardCore() {
           <p style={{ fontSize: '0.8rem', color: 'var(--muted-text)', margin: 0 }}>
             White-Label System
           </p>
+          <div
+            style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}
+          >
+            <span
+              style={{
+                width: '10px',
+                height: '10px',
+                borderRadius: '50%',
+                backgroundColor: isOnline ? '#10b981' : '#ef4444',
+                display: 'inline-block',
+              }}
+            />
+            <span style={{ fontSize: '0.9rem', color: 'var(--brand-text-muted)' }}>
+              {isOnline ? 'Соединение стабильно' : 'Вне сети (Офлайн)'}
+            </span>
+          </div>
+
           {/* 1. Динамическое название бренда вместо жестко зашитого текста */}
           <h1 style={{ color: 'var(--brand-text)' }}>
             Дашборд аналитики: {currentConfig.brandName}
